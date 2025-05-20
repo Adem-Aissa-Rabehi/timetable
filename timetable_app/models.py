@@ -28,6 +28,7 @@ class ClassGroup(models.Model):
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
     student_count = models.PositiveIntegerField(null=True, blank=True)
     color = models.CharField(max_length=7, null=True, blank=True)  # Ex: #4A90E2
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True, blank=True, related_name='class_groups')
 
     def __str__(self):
         return self.name or "Groupe inconnu"

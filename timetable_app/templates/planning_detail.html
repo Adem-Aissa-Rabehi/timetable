@@ -13,8 +13,12 @@
   <link rel="stylesheet" href="{% static 'css/planning.css' %}" />
   <link rel="stylesheet" href="{% static 'css/config-modal.css' %}" />
   <link rel="stylesheet" href="{% static 'css/menu-generic.css' %}" />
+  <script>
+    let currentPlanningId = {{ planning.id }};
+  </script>
 </head>
 <body>
+    <input type="hidden" name="csrfmiddlewareex" value="{{ csrf_token }}">
 
   <!-- Header avec menu -->
   <div class="header">
@@ -22,8 +26,8 @@
       <div class="menu-group">
         <a href="#" title="Sujets" onclick="showModal('subjects')"><i class="fa-solid fa-book-open"></i> Sujets</a>
         <a href="#" title="Classes" onclick="showModal('classes')"><i class="fa-solid fa-building-columns"></i> Classes</a>
-        <a href="#" title="Salles" onclick="showModal('rooms')"><i class="fa-solid fa-chalkboard-user"></i> Salles</a>
-        <a href="#" title="Professeurs" onclick="showModal('teachers')"><i class="fa-solid fa-graduation-cap"></i> Professeurs</a>
+        <a href="#" title="Salles" onclick="showModal('salles')"><i class="fa-solid fa-chalkboard-user"></i> Salles</a>
+        <a href="#" title="Professeurs" onclick="showModal('professeurs')"><i class="fa-solid fa-graduation-cap"></i> Professeurs</a>
       </div>
       <div class="separator">|</div>
       <div class="menu-group">
@@ -37,7 +41,7 @@
   </div>
 
   <!-- Modal : Configuration des créneaux horaires (si vide) -->
-  <div id="config-modal" class="modal config-modal">
+  <div id="config-modal" class="modal config-modal">    
     <div class="modal-content">
       <span class="close-btn" onclick="closeConfigModal()">&times;</span>
       <h2>Configurer le planning</h2>
@@ -47,7 +51,7 @@
 
         <label>
           <input type="checkbox" id="show-weekend" checked>
-          Afficher Dimanche et Samedi
+          Afficher Vendredi et Samedi
         </label>
 
         <button type="submit">Générer la grille</button>
@@ -93,11 +97,13 @@
 
         <!-- Tableau principal -->
         <div class="main-content">
-          <button class="add-btn"><i class="fa-solid fa-plus"></i> Ajouter</button>
+          <button class="add-btn" onclick="showAddItemModal(currentType)"><i class="fa-solid fa-plus"></i> Ajouter</button>
 
           <div class="table-container">
             <table class="table-generic">
-             
+              <thead>
+                <!-- L'en-tête sera rempli dynamiquement -->
+              </thead>
               <tbody>
                 <tr>
                   <td>Mathématiques</td>
@@ -128,6 +134,19 @@
 
   <!-- Grille horaire -->
   <div id="timetable-container"></div>
+
+  <!-- Modal d'ajout d'élément -->
+  <div id="add-item-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAddItemModal()">&times;</span>
+      <h2 id="add-item-title">Ajouter un élément</h2>
+      <form id="add-item-form">
+        <div id="form-fields">
+          <!-- Les champs seront ajoutés dynamiquement ici -->
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Scripts JS -->
   <script src="{% static 'js/timetable.js' %}"></script>
