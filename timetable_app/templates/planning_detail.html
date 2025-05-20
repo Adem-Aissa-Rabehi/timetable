@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Planning - {{ planning.nom }}</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css " />
+  <script src="https://kit.fontawesome.com/e94fc605f2.js " crossorigin="anonymous"></script>
+
+  <!-- CSS séparés -->
+  <link rel="stylesheet" href="{% static 'css/planning.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/config-modal.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/menu-generic.css' %}" />
+</head>
+<body>
+
+  <!-- Header avec menu -->
+  <div class="header">
+    <div class="menu">
+      <div class="menu-group">
+        <a href="#" title="Sujets" onclick="showModal('subjects')"><i class="fa-solid fa-book-open"></i> Sujets</a>
+        <a href="#" title="Classes" onclick="showModal('classes')"><i class="fa-solid fa-building-columns"></i> Classes</a>
+        <a href="#" title="Salles" onclick="showModal('rooms')"><i class="fa-solid fa-chalkboard-user"></i> Salles</a>
+        <a href="#" title="Professeurs" onclick="showModal('teachers')"><i class="fa-solid fa-graduation-cap"></i> Professeurs</a>
+      </div>
+      <div class="separator">|</div>
+      <div class="menu-group">
+        <a href="#"><i class="fa-solid fa-check-circle"></i> Test</a>
+        <a href="#"><i class="fa-solid fa-cloud-arrow-up"></i> Générer nouveau</a>
+        <a href="#"><i class="fa-solid fa-gavel"></i> Vérification</a>
+      </div>
+    </div>
+
+    <button id="save-changes-btn">Enregistrer les modifications</button>
+  </div>
+
+  <!-- Modal : Configuration des créneaux horaires (si vide) -->
+  <div id="config-modal" class="modal config-modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeConfigModal()">&times;</span>
+      <h2>Configurer le planning</h2>
+      <form id="config-planning-form">
+        <label for="slots">Nombre de créneaux par jour :</label>
+        <input type="number" id="slots" value="5" min="1" max="15" required>
+
+        <label>
+          <input type="checkbox" id="show-weekend" checked>
+          Afficher Dimanche et Samedi
+        </label>
+
+        <button type="submit">Générer la grille</button>
+      </form>
+    </div>
+  </div>
+
+ <!-- Modal générique : Sujets, Classes, etc. -->
+<div id="generic-modal" class="modal generic-modal">
+  <div class="modal-content">
+
+    <!-- Titre et bouton de fermeture -->
+    <div class="header">
+      <h2 class="modal-title" id="modal-title">Configurer Sujets</h2>
+      <span class="close-btn" onclick="closeGenericModal()">&times;</span>
+    </div>
+
+    <!-- Barre horizontale de séparation -->
+    <hr />
+
+    <!-- Contenu principal -->
+    <div class="content">
+      <div style="display: flex; gap: 20px;">
+        <!-- Barre latérale gauche -->
+        <div class="sidebar-left">
+          <div class="menu-item" onclick="showSubjectForm()">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Sujets</span>
+          </div>
+          <div class="menu-item" onclick="showClassForm()">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>Classes</span>
+          </div>
+          <div class="menu-item" onclick="showRoomForm()">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>Salles</span>
+          </div>
+          <div class="menu-item" onclick="showTeacherForm()">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Professeurs</span>
+          </div>
+        </div>
+
+        <!-- Tableau principal -->
+        <div class="main-content">
+          <button class="add-btn"><i class="fa-solid fa-plus"></i> Ajouter</button>
+
+          <div class="table-container">
+            <table class="table-generic">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Abréviation</th>
+                  <th>Nombre</th>
+                  <th>Temps Ideal</th>
+                  <th>Distribution</th>
+                  <th>Préparation</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mathématiques</td>
+                  <td>MAT</td>
+                  <td>4</td>
+                  <td><div class="time-bar"><div style="width: 60%; background-color: green;"></div></div></td>
+                  <td>Ideal</td>
+                  <td>Oui</td>
+                  <td>
+                    <i class="fa-solid fa-ellipsis-vertical action-menu-trigger" onclick="showContextMenu(this)"></i>
+                    <ul class="context-menu">
+                      <li onclick="editItem()">Éditer</li>
+                      <li onclick="deleteItem()">Supprimer</li>
+                      <li onclick="openCourse()">Cours</li>
+                      <li onclick="freeTime()">Temps libre</li>
+                      <li onclick="showConditions()">Conditions</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Grille horaire -->
+  <div id="timetable-container"></div>
+
+  <!-- Scripts JS -->
+  <script src="{% static 'js/timetable.js' %}"></script>
+  <script src="{% static 'js/config-modal.js' %}"></script>
+  <script src="{% static 'js/menu.js' %}"></script>
+</body>
+</html>

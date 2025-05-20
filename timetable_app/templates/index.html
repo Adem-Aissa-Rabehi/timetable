@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mes Plannings</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+  <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+  <h1>📅 Mes Plannings</h1>
+  <button onclick="showAddModal()">➕ Nouveau planning</button>
+
+  <div class="planning-list" id="planning-list"></div>
+
+  <!-- Modal : Ajouter -->
+  <div id="add-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAllModals()">&times;</span>
+      <h2>Ajouter un planning</h2>
+      <form id="add-form">
+        <label>Nom :</label>
+        <input type="text" id="new-nom" required>
+
+        <label>Session :</label>
+        <input type="text" id="new-session">
+
+        <button type="submit">Créer</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal : Modifier -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAllModals()">&times;</span>
+      <h2>Modifier le planning</h2>
+      <form id="edit-form">
+        <input type="hidden" id="edit-id">
+        <label>Nom :</label>
+        <input type="text" id="edit-nom" required>
+
+        <label>Session :</label>
+        <input type="text" id="edit-session">
+
+        <button type="submit">Enregistrer</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal : Confirmer suppression -->
+  <div id="delete-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAllModals()">&times;</span>
+      <h2>Supprimer ce planning ?</h2>
+      <p id="delete-planning-name"></p>
+      <input type="hidden" id="delete-planning-id">
+      <button onclick="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
